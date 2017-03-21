@@ -12,7 +12,7 @@ REST web service to manage users and candidate scores, using ASP.NET Web API RES
 
 ---
 # team
-(EA) Exam Assessment
+(USL) User Scores Login
 - Alain Bruno
 - Erik May
 - Michael Furlow

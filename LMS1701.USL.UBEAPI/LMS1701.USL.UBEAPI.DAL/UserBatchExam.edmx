@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="UserScoresLoginModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="BatchPK" />
+          </Key>
+          <Property Name="BatchPK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BatchID" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="80" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="LengthInWeeks" Type="int" />
+        </EntityType>
+        <EntityType Name="ExamAssessment">
+          <Key>
+            <PropertyRef Name="ExamAssessmentID" />
+          </Key>
+          <Property Name="ExamAssessmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Attempts" Type="int" />
+          <Property Name="SettingsID" Type="int" />
+          <Property Name="TimeRemaining" Type="time" Precision="7" />
+          <Property Name="IsExamComplete" Type="bit" />
+          <Property Name="Score" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'UserScoresLogin.dbo.ExamQuestions' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ExamQuestions">
+          <Property Name="SettingID" Type="int" />
+          <Property Name="QuestionID" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+        <EntityType Name="ExamSettings">
+          <Key>
+            <PropertyRef Name="ExamSettingsID" />
+          </Key>
+          <Property Name="ExamSettingsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="LengthOfExamInMinutes" Type="int" />
+          <Property Name="ExamTemplateID" Type="varchar" MaxLength="50" />
+          <Property Name="Editable" Type="bit" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="AllowedAttempts" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'UserScoresLogin.dbo.ExamSettings_Batch' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ExamSettings_Batch">
+          <Property Name="SettingID" Type="int" />
+          <Property Name="BatchID" Type="int" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'UserScoresLogin.dbo.ExamSettings_User' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ExamSettings_User">
+          <Property Name="SettingID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'UserScoresLogin.dbo.QuestionOrder' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QuestionOrder">
+          <Property Name="QuestionNumber" Type="int" />
+          <Property Name="QuestionID" Type="varchar" MaxLength="50" />
+          <Property Name="ExamAssessmentFK" Type="int" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'UserScoresLogin.dbo.Roster' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Roster">
+          <Property Name="UserID" Type="int" />
+          <Property Name="BatchID" Type="int" />
+          <Property Name="Status" Type="int" />
+        </EntityType>-->
+        <EntityType Name="StatusType">
+          <Key>
+            <PropertyRef Name="StatusTypeID" />
+          </Key>
+          <Property Name="StatusTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserPK" />
+          </Key>
+          <Property Name="UserPK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fname" Type="varchar" MaxLength="40" />
+          <Property Name="lname" Type="varchar" MaxLength="40" />
+          <Property Name="UserType" Type="int" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="UserTypePK" />
+          </Key>
+          <Property Name="UserTypePK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="FK__ExamAsses__Setti__59063A47">
+          <End Role="ExamSettings" Type="Self.ExamSettings" Multiplicity="0..1" />
+          <End Role="ExamAssessment" Type="Self.ExamAssessment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExamSettings">
+              <PropertyRef Name="ExamSettingsID" />
+            </Principal>
+            <Dependent Role="ExamAssessment">
+              <PropertyRef Name="SettingsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ExamAsses__UserI__5812160E">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ExamAssessment" Type="Self.ExamAssessment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserPK" />
+            </Principal>
+            <Dependent Role="ExamAssessment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.ExamQuestions' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__ExamQuest__Setti__619B8048" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.ExamSettings_Batch' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__ExamSetti__Batch__5DCAEF64" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.ExamSettings_Batch' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__ExamSetti__Setti__5CD6CB2B" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.ExamSettings_User' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__ExamSetti__UserI__5FB337D6" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.QuestionOrder' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__QuestionO__ExamA__5AEE82B9" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.Roster' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Roster__BatchID__52593CB8" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.Roster' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Roster__Status__534D60F1" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'UserScoresLogin.dbo.Roster' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Roster__UserID__5165187F" />-->
+        <Association Name="FK__User__UserType__4AB81AF0">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="UserTypePK" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddUserToBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userID" Type="int" Mode="In" />
+          <Parameter Name="batchID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CheckForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CreateBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="startdate" Type="date" Mode="In" />
+          <Parameter Name="lengthweeks" Type="int" Mode="In" />
+          <Parameter Name="batchID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CreateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fname" Type="varchar" Mode="In" />
+          <Parameter Name="lname" Type="varchar" Mode="In" />
+          <Parameter Name="UserType" Type="int" Mode="In" />
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="RemoveUserFromBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="UserScoresLoginModelStoreContainer">
+          <EntitySet Name="Batch" EntityType="Self.Batch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamAssessment" EntityType="Self.ExamAssessment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamSettings" EntityType="Self.ExamSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatusType" EntityType="Self.StatusType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ExamAsses__Setti__59063A47" Association="Self.FK__ExamAsses__Setti__59063A47">
+            <End Role="ExamSettings" EntitySet="ExamSettings" />
+            <End Role="ExamAssessment" EntitySet="ExamAssessment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ExamAsses__UserI__5812160E" Association="Self.FK__ExamAsses__UserI__5812160E">
+            <End Role="User" EntitySet="User" />
+            <End Role="ExamAssessment" EntitySet="ExamAssessment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__UserType__4AB81AF0" Association="Self.FK__User__UserType__4AB81AF0">
+            <End Role="UserType" EntitySet="UserType" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UserScoresLoginModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Batch">
+          <Key>
+            <PropertyRef Name="BatchPK" />
+          </Key>
+          <Property Name="BatchPK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BatchID" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="LengthInWeeks" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ExamAssessment">
+          <Key>
+            <PropertyRef Name="ExamAssessmentID" />
+          </Key>
+          <Property Name="ExamAssessmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Attempts" Type="Int32" />
+          <Property Name="SettingsID" Type="Int32" />
+          <Property Name="TimeRemaining" Type="Time" Precision="7" />
+          <Property Name="IsExamComplete" Type="Boolean" />
+          <Property Name="Score" Type="Decimal" Precision="5" Scale="2" />
+          <NavigationProperty Name="ExamSetting" Relationship="Self.FK__ExamAsses__Setti__59063A47" FromRole="ExamAssessment" ToRole="ExamSettings" />
+          <NavigationProperty Name="User" Relationship="Self.FK__ExamAsses__UserI__5812160E" FromRole="ExamAssessment" ToRole="User" />
+        </EntityType>
+        <EntityType Name="ExamSetting">
+          <Key>
+            <PropertyRef Name="ExamSettingsID" />
+          </Key>
+          <Property Name="ExamSettingsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="LengthOfExamInMinutes" Type="Int32" />
+          <Property Name="ExamTemplateID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Editable" Type="Boolean" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="AllowedAttempts" Type="Int32" />
+          <NavigationProperty Name="ExamAssessments" Relationship="Self.FK__ExamAsses__Setti__59063A47" FromRole="ExamSettings" ToRole="ExamAssessment" />
+        </EntityType>
+        <EntityType Name="StatusType">
+          <Key>
+            <PropertyRef Name="StatusTypeID" />
+          </Key>
+          <Property Name="StatusTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserPK" />
+          </Key>
+          <Property Name="UserPK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fname" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="lname" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="Int32" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ExamAssessments" Relationship="Self.FK__ExamAsses__UserI__5812160E" FromRole="User" ToRole="ExamAssessment" />
+          <NavigationProperty Name="UserType1" Relationship="Self.FK__User__UserType__4AB81AF0" FromRole="User" ToRole="UserType" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="UserTypePK" />
+          </Key>
+          <Property Name="UserTypePK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__User__UserType__4AB81AF0" FromRole="UserType" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__ExamAsses__Setti__59063A47">
+          <End Role="ExamSettings" Type="Self.ExamSetting" Multiplicity="0..1" />
+          <End Role="ExamAssessment" Type="Self.ExamAssessment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExamSettings">
+              <PropertyRef Name="ExamSettingsID" />
+            </Principal>
+            <Dependent Role="ExamAssessment">
+              <PropertyRef Name="SettingsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ExamAsses__UserI__5812160E">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ExamAssessment" Type="Self.ExamAssessment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserPK" />
+            </Principal>
+            <Dependent Role="ExamAssessment">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__UserType__4AB81AF0">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="UserTypePK" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UserScoresLoginEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Batches" EntityType="Self.Batch" />
+          <EntitySet Name="ExamAssessments" EntityType="Self.ExamAssessment" />
+          <EntitySet Name="ExamSettings" EntityType="Self.ExamSetting" />
+          <EntitySet Name="StatusTypes" EntityType="Self.StatusType" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserTypes" EntityType="Self.UserType" />
+          <AssociationSet Name="FK__ExamAsses__Setti__59063A47" Association="Self.FK__ExamAsses__Setti__59063A47">
+            <End Role="ExamSettings" EntitySet="ExamSettings" />
+            <End Role="ExamAssessment" EntitySet="ExamAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ExamAsses__UserI__5812160E" Association="Self.FK__ExamAsses__UserI__5812160E">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ExamAssessment" EntitySet="ExamAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__UserType__4AB81AF0" Association="Self.FK__User__UserType__4AB81AF0">
+            <End Role="UserType" EntitySet="UserTypes" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <FunctionImport Name="AddUserToBatch">
+            <Parameter Name="userID" Mode="In" Type="Int32" />
+            <Parameter Name="batchID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CheckForUser">
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreateBatch">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="lengthweeks" Mode="In" Type="Int32" />
+            <Parameter Name="batchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreateUser">
+            <Parameter Name="fname" Mode="In" Type="String" />
+            <Parameter Name="lname" Mode="In" Type="String" />
+            <Parameter Name="UserType" Mode="In" Type="Int32" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveUserFromBatch">
+            <Parameter Name="userID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UserScoresLoginModelStoreContainer" CdmEntityContainer="UserScoresLoginEntities">
+          <EntitySetMapping Name="Batches">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.Batch">
+              <MappingFragment StoreEntitySet="Batch">
+                <ScalarProperty Name="BatchPK" ColumnName="BatchPK" />
+                <ScalarProperty Name="BatchID" ColumnName="BatchID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LengthInWeeks" ColumnName="LengthInWeeks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExamAssessments">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.ExamAssessment">
+              <MappingFragment StoreEntitySet="ExamAssessment">
+                <ScalarProperty Name="ExamAssessmentID" ColumnName="ExamAssessmentID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Attempts" ColumnName="Attempts" />
+                <ScalarProperty Name="SettingsID" ColumnName="SettingsID" />
+                <ScalarProperty Name="TimeRemaining" ColumnName="TimeRemaining" />
+                <ScalarProperty Name="IsExamComplete" ColumnName="IsExamComplete" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExamSettings">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.ExamSetting">
+              <MappingFragment StoreEntitySet="ExamSettings">
+                <ScalarProperty Name="ExamSettingsID" ColumnName="ExamSettingsID" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="LengthOfExamInMinutes" ColumnName="LengthOfExamInMinutes" />
+                <ScalarProperty Name="ExamTemplateID" ColumnName="ExamTemplateID" />
+                <ScalarProperty Name="Editable" ColumnName="Editable" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="AllowedAttempts" ColumnName="AllowedAttempts" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatusTypes">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.StatusType">
+              <MappingFragment StoreEntitySet="StatusType">
+                <ScalarProperty Name="StatusTypeID" ColumnName="StatusTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserPK" ColumnName="UserPK" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTypes">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.UserType">
+              <MappingFragment StoreEntitySet="UserType">
+                <ScalarProperty Name="UserTypePK" ColumnName="UserTypePK" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddUserToBatch" FunctionName="UserScoresLoginModel.Store.AddUserToBatch" />
+          <FunctionImportMapping FunctionImportName="CheckForUser" FunctionName="UserScoresLoginModel.Store.CheckForUser" />
+          <FunctionImportMapping FunctionImportName="CreateBatch" FunctionName="UserScoresLoginModel.Store.CreateBatch" />
+          <FunctionImportMapping FunctionImportName="CreateUser" FunctionName="UserScoresLoginModel.Store.CreateUser" />
+          <FunctionImportMapping FunctionImportName="RemoveUserFromBatch" FunctionName="UserScoresLoginModel.Store.RemoveUserFromBatch" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

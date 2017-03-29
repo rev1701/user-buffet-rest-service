@@ -18,39 +18,96 @@ namespace LMS1701.USL.UBEAPI.Controllers
         private UserScoresLoginEntities db = new UserScoresLoginEntities();
 
         // GET: api/Batches
-        public IQueryable<Batch> GetBatches()
+        public List<Models.Batch> GetBatches()
         {
-            return db.Batches;
+            List<Models.Batch> mdlBatches = new List<Models.Batch>();
+
+            foreach (DAL.Batch btc in db.Batches.ToList())
+            {
+                mdlBatches.Add(AutoMapper.Mapper.Map<Models.Batch>(btc));
+            }
+
+            return mdlBatches;
         }
 
-        // GET: api/Batches/5
+
+        // GET
+        [Route("api/Batches/GetBatch")]
         [ResponseType(typeof(Batch))]
         public async Task<IHttpActionResult> GetBatch(int id)
         {
-            Batch batch = await db. Batches.FindAsync(id);
+            Batch batch = await db.Batches.FindAsync(id);
             if (batch == null)
             {
                 return NotFound();
             }
 
-            return Ok(batch);
+            Models.Batch mdlBatch = AutoMapper.Mapper.Map<Models.Batch>(batch);
+
+            return Ok(mdlBatch);
         }
 
-        // PUT: api/Batches/5
+
+        // GET
+        [Route("api/Batches/GetBatch")]
+        [ResponseType(typeof(Batch))]
+        public async Task<IHttpActionResult> GetBatch(string batchID)
+        {
+            List<Batch> batches = await db.Batches.ToListAsync();
+
+            Batch tmpBatch = null;
+
+            foreach (Batch btc in batches)
+            {
+                if (btc.BatchID == batchID)
+                {
+                    tmpBatch = btc;
+                    break;
+                }
+            }
+
+
+            if (tmpBatch == null)
+            {
+                return NotFound();
+            }
+
+            Models.Batch mdlBatch = AutoMapper.Mapper.Map<Models.Batch>(tmpBatch);
+
+
+            return Ok(mdlBatch);
+        }
+
+        // PUT
+        [Route("api/Batches/EditBatch")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutBatch(int id, Batch batch)
+        public async Task<IHttpActionResult> PutBatch(string id, Models.Batch mdlBatch)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != batch.BatchPK)
+            Batch saveBatch = null;
+
+            try
             {
-                return BadRequest();
+                saveBatch = await db.Batches.SingleAsync(b => b.BatchID == mdlBatch.BatchID);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
             }
 
-            db.Entry(batch).State = EntityState.Modified;
+            Batch tmpBatch = AutoMapper.Mapper.Map<Batch>(mdlBatch);
+
+            tmpBatch.BatchPK = saveBatch.BatchPK;
+
+            db.Batches.Attach(saveBatch);
+
+            saveBatch = tmpBatch;
+
+            db.Entry(saveBatch).State = EntityState.Modified;
 
             try
             {
@@ -58,32 +115,28 @@ namespace LMS1701.USL.UBEAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BatchExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [Route("api/Batches/CreateBatch")]
         // POST: api/Batches
         [ResponseType(typeof(Batch))]
-        public async Task<IHttpActionResult> PostBatch(Batch batch)
+        public async Task<IHttpActionResult> PostBatch(Models.Batch mdlBatch)
         {
+            Batch dbBatch = AutoMapper.Mapper.Map<Batch>(mdlBatch);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Batches.Add(batch);
+            dbBatch = db.Batches.Add(dbBatch);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = batch.BatchPK }, batch);
+            return CreatedAtRoute("DefaultApi", new { id = dbBatch.BatchPK }, dbBatch);
         }
 
         // DELETE: api/Batches/5
@@ -114,6 +167,11 @@ namespace LMS1701.USL.UBEAPI.Controllers
         private bool BatchExists(int id)
         {
             return db.Batches.Count(e => e.BatchPK == id) > 0;
+        }
+
+        private bool BatchExists(string id)
+        {
+            return db.Batches.Count(e => e.BatchID == id) > 0;
         }
     }
 }

@@ -7,5 +7,6 @@ namespace LMS1701.USL.UBEAPI.Models
 {
     public class UserType
     {
+        public string Role { get; set; }
     }
 }

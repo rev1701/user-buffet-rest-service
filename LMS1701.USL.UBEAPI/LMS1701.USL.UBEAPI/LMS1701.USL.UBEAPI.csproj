@@ -143,6 +143,9 @@
     <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\ExamAssessment.cs" />
     <Compile Include="Models\ExamSetting.cs" />
+    <Compile Include="Models\ExamSettings_User.cs" />
+    <Compile Include="Models\QuestionOrder.cs" />
+    <Compile Include="Models\Roster.cs" />
     <Compile Include="Models\StatusType.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserType.cs" />

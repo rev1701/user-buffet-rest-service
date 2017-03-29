@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f089c1673899496c8254ffabc7fe74a1" Name="Diagram1">
+        <EntityTypeShape EntityType="UserScoresLoginModel.Batch" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.ExamAssessment" Width="1.5" PointX="5.25" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.ExamSetting" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.ExamSettings_User" Width="1.5" PointX="5.25" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.StatusType" Width="1.5" PointX="6" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.sysdiagram" Width="1.5" PointX="8.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.User" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.UserType" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.ExamQuestion" Width="1.5" PointX="5.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.QuestionOrder" Width="1.5" PointX="7.5" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UserScoresLoginModel.Roster" Width="1.5" PointX="8.25" PointY="5.125" IsExpanded="true" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__Roster__BatchID__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__ExamAsses__Setti__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__ExamAsses__UserI__5812160E" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__QuestionO__ExamA__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__ExamQuest__Setti__619B8048" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__ExamSetti__UserI__74AE54BC" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__Roster__Status__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__Roster__UserID__5165187F" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.FK__User__UserType__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="UserScoresLoginModel.ExamSettings_Batch" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

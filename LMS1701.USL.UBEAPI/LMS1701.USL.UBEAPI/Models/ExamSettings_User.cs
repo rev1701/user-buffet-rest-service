@@ -5,8 +5,9 @@ using System.Web;
 
 namespace LMS1701.USL.UBEAPI.Models
 {
-    public class StatusType
+    public class ExamSettings_User
     {
-        public string Description { get; set; }
+        public int SettingID { get; set; }
+        public int UserID { get; set; }
     }
 }

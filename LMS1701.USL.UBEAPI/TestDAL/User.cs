@@ -7,29 +7,34 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LMS1701.USL.UBEAPI.DAL
+namespace TestDAL
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Batch
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Batch()
+        public User()
         {
+            this.ExamAssessments = new HashSet<ExamAssessment>();
+            this.ExamSettings_User = new HashSet<ExamSettings_User>();
             this.Rosters = new HashSet<Roster>();
-            this.ExamSettings = new HashSet<ExamSetting>();
         }
     
-        public int BatchPK { get; set; }
-        public string BatchID { get; set; }
-        public string Name { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<int> LengthInWeeks { get; set; }
+        public int UserPK { get; set; }
+        public string fname { get; set; }
+        public string lname { get; set; }
+        public int UserType { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Roster> Rosters { get; set; }
+        public virtual ICollection<ExamAssessment> ExamAssessments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExamSetting> ExamSettings { get; set; }
+        public virtual ICollection<ExamSettings_User> ExamSettings_User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Roster> Rosters { get; set; }
+        public virtual UserType UserType1 { get; set; }
     }
 }

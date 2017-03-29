@@ -16,8 +16,8 @@ namespace LMS1701.USL.UBEAPI.App_Start
 
             routes.MapHttpRoute(
              name: "API Default",
-              routeTemplate: "api/{controller}/{method}",
-              defaults: new { method = RouteParameter.Optional }
+              routeTemplate: "api/{controller}/{action}/{id}",
+              defaults: new { id = RouteParameter.Optional }
             );
         }
     }

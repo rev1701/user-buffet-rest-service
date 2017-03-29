@@ -18,39 +18,108 @@ namespace LMS1701.USL.UBEAPI.Controllers
         private UserScoresLoginEntities db = new UserScoresLoginEntities();
 
         // GET: api/ExamAssessments
-        public IQueryable<ExamAssessment> GetExamAssessments()
+        public List<Models.ExamAssessment> GetExamAssessments()
         {
-            return db.ExamAssessments;
+            List<Models.ExamAssessment> tmpExams = new List<Models.ExamAssessment>();
+            foreach (DAL.ExamAssessment exm in db.ExamAssessments.ToArray())
+            {
+                tmpExams.Add(AutoMapper.Mapper.Map<Models.ExamAssessment>(exm));
+            }
+
+            return tmpExams;
         }
 
         // GET: api/ExamAssessments/5
+        [Route("api/ExamAssessments/GetUserExams")]
         [ResponseType(typeof(ExamAssessment))]
-        public async Task<IHttpActionResult> GetExamAssessment(int id)
+        public async Task<IHttpActionResult> GetExamAssessments(string email)
         {
-            ExamAssessment examAssessment = await db.ExamAssessments.FindAsync(id);
-            if (examAssessment == null)
+
+            var uExams = await db.ExamAssessments.ToArrayAsync();
+            List<Models.ExamAssessment> userExams = new List<Models.ExamAssessment>();
+            
+            foreach (ExamAssessment eAssess in uExams)
+            {
+                if(eAssess.User.email == email)
+                {
+                    userExams.Add(AutoMapper.Mapper.Map<Models.ExamAssessment>(eAssess));
+                }
+            }
+
+            if(userExams.Count() < 1)
             {
                 return NotFound();
             }
+                                                          
+            return Ok(userExams);
+        }
 
-            return Ok(examAssessment);
+
+        [Route("api/ExamAssessments/GetExam")]
+        [ResponseType(typeof(ExamAssessment))]
+        public async Task<IHttpActionResult> GetExamAssessment(string email, int examSettingsId)
+        {
+
+            int userId = -1;
+
+            foreach(User tmpUsr in await db.Users.ToArrayAsync())
+            {
+                if(tmpUsr.email == email)
+                {
+                    userId = tmpUsr.UserPK;
+                }
+
+                break;
+            }
+
+            Models.ExamAssessment mdlExamAssessment = null;
+
+            foreach(ExamAssessment tmpExam in await db.ExamAssessments.ToArrayAsync())
+            {
+
+                if(tmpExam.UserID == userId && tmpExam.SettingsID == examSettingsId)
+                {
+                    mdlExamAssessment = AutoMapper.Mapper.Map<Models.ExamAssessment>(tmpExam);
+                }
+
+            }
+
+            if (mdlExamAssessment == null)
+                return NotFound();
+            
+            return Ok(mdlExamAssessment);
         }
 
         // PUT: api/ExamAssessments/5
+        [Route("api/ExamAssessments/Edit")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutExamAssessment(int id, ExamAssessment examAssessment)
+        public async Task<IHttpActionResult> PutExamAssessment(string email, Models.ExamAssessment mdlExamAssessment)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != examAssessment.ExamAssessmentID)
+            ExamAssessment saveExamAssessment = null;
+
+            try
             {
-                return BadRequest();
+                saveExamAssessment = await db.ExamAssessments.SingleAsync(e => e.User.email == email);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
             }
 
-            db.Entry(examAssessment).State = EntityState.Modified;
+            ExamAssessment tmpExamAssessment = AutoMapper.Mapper.Map<ExamAssessment>(mdlExamAssessment);
+
+            tmpExamAssessment.ExamAssessmentID = saveExamAssessment.ExamAssessmentID;
+
+            db.ExamAssessments.Attach(saveExamAssessment);
+
+            saveExamAssessment = tmpExamAssessment;
+
+            db.Entry(saveExamAssessment).State = EntityState.Modified;
 
             try
             {
@@ -58,29 +127,24 @@ namespace LMS1701.USL.UBEAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ExamAssessmentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/ExamAssessments
+        [Route("api/ExamAssessments/SaveExam")]
         [ResponseType(typeof(ExamAssessment))]
-        public async Task<IHttpActionResult> PostExamAssessment(ExamAssessment examAssessment)
+        public async Task<IHttpActionResult> PostExamAssessment(Models.ExamAssessment mdlExam)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.ExamAssessments.Add(examAssessment);
+            ExamAssessment examAssessment = AutoMapper.Mapper.Map<ExamAssessment>(mdlExam);
+            examAssessment = db.ExamAssessments.Add(examAssessment);
             await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = examAssessment.ExamAssessmentID }, examAssessment);

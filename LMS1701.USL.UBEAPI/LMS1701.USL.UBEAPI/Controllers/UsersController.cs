@@ -18,13 +18,20 @@ namespace LMS1701.USL.UBEAPI.Controllers
         private UserScoresLoginEntities db = new UserScoresLoginEntities();
 
         // GET: api/Users
-        public IQueryable<User> GetUsers()
+        public List<Models.User> GetUsers()
         {
-            return db.Users;
+            List<Models.User> test = new List<Models.User>();
+            foreach (DAL.User usr in db.Users.ToList())
+            {
+                test.Add(AutoMapper.Mapper.Map<Models.User>(usr));
+            }
+
+            return test;
         }
 
-        // GET: api/Users/5
-        [ResponseType(typeof(User))]
+        // GET
+        [Route("api/Users/GetUser")]
+        [ResponseType(typeof( User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
             User user = await db.Users.FindAsync(id);
@@ -33,24 +40,70 @@ namespace LMS1701.USL.UBEAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            Models.User usr = AutoMapper.Mapper.Map<Models.User>(user);
+
+            return Ok(usr);
         }
 
-        // PUT: api/Users/5
+        //GET
+        [Route("api/Users/GetUser")]
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> GetUser(string email)
+        {
+            List<User> users = await db.Users.ToListAsync();
+
+            User user = null;
+
+            foreach (User usrObj in users)
+            {
+                if (usrObj.email == email)
+                {
+                    user = usrObj;
+                    break;
+                }
+
+            }
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            Models.User usr = AutoMapper.Mapper.Map<Models.User>(user);
+
+            return Ok(usr);
+        }
+
+        // PUT
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutUser(int id, User user)
+        [Route("api/Users/EditUser")]
+        public async Task<IHttpActionResult> PutUser(string email, Models.User user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.UserPK)
+            User saveUser = null;
+
+            try
             {
-                return BadRequest();
+                saveUser = await db.Users.SingleAsync(u => u.email == user.email);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            User tmpUser = AutoMapper.Mapper.Map<User>(user);
+
+            tmpUser.UserPK = saveUser.UserPK;
+
+            db.Users.Attach(saveUser);
+
+            saveUser = tmpUser;
+
+            db.Entry(saveUser).State = EntityState.Modified;
 
             try
             {
@@ -58,35 +111,31 @@ namespace LMS1701.USL.UBEAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
+        // POST
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        [Route("api/Users/CreateUser")]
+        public async Task<IHttpActionResult> PostUser(Models.User user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
+            User dbuser = AutoMapper.Mapper.Map<User>(user);
+
+            dbuser = db.Users.Add(dbuser);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.UserPK }, user);
+            return CreatedAtRoute("DefaultApi", new { id = dbuser.UserPK }, user);
         }
 
-        // DELETE: api/Users/5
+        // DELETE
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> DeleteUser(int id)
         {
@@ -114,6 +163,11 @@ namespace LMS1701.USL.UBEAPI.Controllers
         private bool UserExists(int id)
         {
             return db.Users.Count(e => e.UserPK == id) > 0;
+        }
+
+        private bool UserExists(string email)
+        {
+            return db.Users.Count(e => e.email == email) > 0;
         }
     }
 }

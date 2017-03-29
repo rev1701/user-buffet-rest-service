@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LMS1701.USL.UBEAPI.DAL
+namespace TestDAL
 {
     using System;
     using System.Collections.Generic;

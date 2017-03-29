@@ -18,9 +18,16 @@ namespace LMS1701.USL.UBEAPI.Controllers
         private UserScoresLoginEntities db = new UserScoresLoginEntities();
 
         // GET: api/ExamSettings
-        public IQueryable<ExamSetting> GetExamSettings()
+        public List<Models.ExamSetting> GetExamSettings()
         {
-            return db.ExamSettings;
+            List<Models.ExamSetting> mdlExams = new List<Models.ExamSetting>();
+
+            foreach (DAL.ExamSetting eStng in db.ExamSettings.ToList())
+            {
+                mdlExams.Add(AutoMapper.Mapper.Map<Models.ExamSetting>(eStng));
+            }
+
+            return mdlExams;
         }
 
         // GET: api/ExamSettings/5

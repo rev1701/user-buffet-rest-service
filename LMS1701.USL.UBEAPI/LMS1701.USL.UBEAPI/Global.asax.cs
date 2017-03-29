@@ -14,15 +14,11 @@ namespace LMS1701.USL.UBEAPI
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
-            var rhm = new RequestHeaderMapping("Accept", "text/html", StringComparison.InvariantCultureIgnoreCase, true, "application/json"); GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(rhm);
-
+            var rhm = new RequestHeaderMapping("Accept", "text/html", StringComparison.InvariantCultureIgnoreCase, true, "application/json");
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(rhm);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
             AutoMapperConfig.Configure();
-
             NLogConfig.nLogger().Log(new NLog.LogEventInfo(NLog.LogLevel.Info, "this", "webservice Started"));
-
 
         }
     }

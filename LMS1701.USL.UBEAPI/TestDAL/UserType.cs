@@ -7,30 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LMS1701.USL.UBEAPI.DAL
+namespace TestDAL
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ExamAssessment
+    public partial class UserType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ExamAssessment()
+        public UserType()
         {
-            this.QuestionOrders = new HashSet<QuestionOrder>();
+            this.Users = new HashSet<User>();
         }
     
-        public int ExamAssessmentID { get; set; }
-        public int UserID { get; set; }
-        public Nullable<int> Attempts { get; set; }
-        public int SettingsID { get; set; }
-        public Nullable<System.TimeSpan> TimeRemaining { get; set; }
-        public Nullable<bool> IsExamComplete { get; set; }
-        public Nullable<decimal> Score { get; set; }
+        public int UserTypePK { get; set; }
+        public string Role { get; set; }
     
-        public virtual ExamSetting ExamSetting { get; set; }
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<QuestionOrder> QuestionOrders { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

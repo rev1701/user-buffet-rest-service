@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using LMS1701.USL.UBEAPI.DAL;
+using System.Web.Http.Cors;
 
 namespace LMS1701.USL.UBEAPI.Controllers
 {

@@ -21,6 +21,8 @@ namespace LMS1701.USL.UBEAPI.App_Start
                 cfg.CreateMap<DAL.ExamAssessment, Models.ExamAssessment>();
                 cfg.CreateMap<DAL.Roster, Models.Roster>();
                 cfg.CreateMap<DAL.StatusType, Models.StatusType>();
+                cfg.CreateMap<DAL.QuestionOrder, Models.QuestionOrder>();
+                cfg.CreateMap<DAL.QuestionAnswer, Models.QuestionAnswer>();
 
 
 
@@ -31,6 +33,7 @@ namespace LMS1701.USL.UBEAPI.App_Start
                 cfg.CreateMap<Models.ExamAssessment, DAL.ExamAssessment>();
                 cfg.CreateMap<Models.Roster, DAL.Roster>();
                 cfg.CreateMap<Models.StatusType, DAL.StatusType>();
+                cfg.CreateMap<Models.QuestionOrder, DAL.QuestionOrder>();
             });
         }
     }

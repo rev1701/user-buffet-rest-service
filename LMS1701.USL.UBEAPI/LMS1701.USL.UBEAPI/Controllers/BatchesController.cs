@@ -13,6 +13,7 @@ using LMS1701.USL.UBEAPI.DAL;
 
 namespace LMS1701.USL.UBEAPI.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class BatchesController : ApiController
     {
         private UserScoresLoginEntities db = new UserScoresLoginEntities();

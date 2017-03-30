@@ -9,8 +9,10 @@ namespace LMS1701.USL.UBEAPI.Models
     {
         public int QuestionNumber { get; set; }
         public string QuestionID { get; set; }
+        public int QuestionOrderID { get; set; }
         public int ExamAssessmentFK { get; set; }
-    
+
         //public virtual ExamAssessment ExamAssessment { get; set; }
+        public virtual QuestionAnswer QuestionAnswer { get; set; }
     }
 }

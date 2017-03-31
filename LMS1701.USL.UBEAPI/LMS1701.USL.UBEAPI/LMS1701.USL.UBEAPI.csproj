@@ -151,6 +151,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Batch.cs" />
+    <Compile Include="Models\ExamQuestion.cs" />
     <Compile Include="Models\QuestionAnswer.cs" />
     <Compile Include="Models\ExamAssessment.cs" />
     <Compile Include="Models\ExamSetting.cs" />

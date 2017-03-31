@@ -93,9 +93,9 @@ namespace LMS1701.USL.UBEAPI.Controllers
         }
 
         // PUT: api/ExamAssessments/5
-        [Route("api/ExamAssessments/Edit")]
+        [Route("api/ExamAssessments/EditExam")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutExamAssessment(string email, Models.ExamAssessment mdlExamAssessment)
+        public async Task<IHttpActionResult> PutExamAssessment(string email, int settingsId, Models.ExamAssessment mdlExamAssessment)
         {
             if (!ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
 
             try
             {
-                saveExamAssessment = await db.ExamAssessments.SingleAsync(e => e.User.email == email);
+                saveExamAssessment = await db.ExamAssessments.SingleAsync(e => e.User.email == email && e.ExamSetting.ExamSettingsID == settingsId);
             }
             catch (Exception e)
             {

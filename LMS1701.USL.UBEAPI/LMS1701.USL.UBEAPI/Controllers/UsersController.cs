@@ -48,8 +48,27 @@ namespace LMS1701.USL.UBEAPI.Controllers
         }
 
         //GET
+        [Route("api/Users/CheckUser")]
+        [ResponseType(typeof(User))]
+        [System.Web.Http.HttpGet]
+        public async Task<IHttpActionResult> CheckUser(string email, string password)
+        {
+            User dbUser = await db.Users.FirstOrDefaultAsync(u => u.email == email && u.password == password);
+
+            if(dbUser == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            Models.User usr = AutoMapper.Mapper.Map<Models.User>(dbUser);
+
+            return Ok(usr);
+        }
+
+        //GET
         [Route("api/Users/GetUser")]
         [ResponseType(typeof(User))]
+        [System.Web.Http.HttpGet]
         public async Task<IHttpActionResult> GetUser(string email)
         {
             List<User> users = await db.Users.ToListAsync();

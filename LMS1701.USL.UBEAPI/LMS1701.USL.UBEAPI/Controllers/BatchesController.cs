@@ -80,6 +80,29 @@ namespace LMS1701.USL.UBEAPI.Controllers
             return Ok(mdlBatch);
         }
 
+        // GET
+        [Route("api/Batches/GetBatches")]
+        [ResponseType(typeof(Batch))]
+        public async Task<IHttpActionResult> GetBatches(string email)
+        {
+            List<Models.Batch> batches = new List<Models.Batch>();
+
+            User dbUser = await db.Users.FirstOrDefaultAsync(u => u.email == email);
+
+            if(dbUser == null)
+            {
+                BadRequest("User Not Found");
+            }
+
+            foreach(Roster rstr in dbUser.Rosters)
+            {
+                batches.Add(AutoMapper.Mapper.Map<Models.Batch>(rstr.Batch));
+            }
+
+
+            return Ok(batches);
+        }
+
         // PUT
         [Route("api/Batches/EditBatch")]
         [ResponseType(typeof(void))]

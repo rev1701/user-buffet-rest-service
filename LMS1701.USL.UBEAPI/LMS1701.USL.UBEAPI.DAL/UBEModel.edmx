@@ -27,14 +27,13 @@
           <Property Name="IsExamComplete" Type="bit" />
           <Property Name="Score" Type="decimal" Precision="5" Scale="2" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'UserScoresLogin.dbo.ExamQuestions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ExamQuestions">
           <Key>
             <PropertyRef Name="SettingID" />
+            <PropertyRef Name="QuestionID" />
           </Key>
           <Property Name="SettingID" Type="int" Nullable="false" />
-          <Property Name="QuestionID" Type="varchar" MaxLength="50" />
+          <Property Name="QuestionID" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="ExamSettings">
           <Key>
@@ -48,8 +47,6 @@ warning 6002: The table/view 'UserScoresLogin.dbo.ExamQuestions' does not have a
           <Property Name="EndTime" Type="datetime" />
           <Property Name="AllowedAttempts" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'UserScoresLogin.dbo.ExamSettings_Batch' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ExamSettings_Batch">
           <Key>
             <PropertyRef Name="SettingID" />
@@ -58,8 +55,6 @@ warning 6002: The table/view 'UserScoresLogin.dbo.ExamSettings_Batch' does not h
           <Property Name="SettingID" Type="int" Nullable="false" />
           <Property Name="BatchID" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'UserScoresLogin.dbo.ExamSettings_User' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ExamSettings_User">
           <Key>
             <PropertyRef Name="SettingID" />
@@ -68,14 +63,13 @@ warning 6002: The table/view 'UserScoresLogin.dbo.ExamSettings_User' does not ha
           <Property Name="SettingID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'UserScoresLogin.dbo.QuestionAnswer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="QuestionAnswer">
           <Key>
             <PropertyRef Name="QuestionOrderID" />
+            <PropertyRef Name="Answer" />
           </Key>
           <Property Name="QuestionOrderID" Type="int" Nullable="false" />
-          <Property Name="Answer" Type="varchar(max)" />
+          <Property Name="Answer" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="QuestionOrder">
           <Key>
@@ -157,9 +151,9 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExamQuest__Setti__619B8048">
+        <Association Name="FK__ExamQuest__Setti__1332DBDC">
           <End Role="ExamSettings" Type="Self.ExamSettings" Multiplicity="1" />
-          <End Role="ExamQuestions" Type="Self.ExamQuestions" Multiplicity="0..1" />
+          <End Role="ExamQuestions" Type="Self.ExamQuestions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ExamSettings">
               <PropertyRef Name="ExamSettingsID" />
@@ -169,7 +163,7 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExamSetti__Batch__5DCAEF64">
+        <Association Name="FK__ExamSetti__Batch__0C85DE4D">
           <End Role="Batch" Type="Self.Batch" Multiplicity="1" />
           <End Role="ExamSettings_Batch" Type="Self.ExamSettings_Batch" Multiplicity="*" />
           <ReferentialConstraint>
@@ -181,7 +175,7 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExamSetti__Setti__5CD6CB2B">
+        <Association Name="FK__ExamSetti__Setti__0B91BA14">
           <End Role="ExamSettings" Type="Self.ExamSettings" Multiplicity="1" />
           <End Role="ExamSettings_Batch" Type="Self.ExamSettings_Batch" Multiplicity="*" />
           <ReferentialConstraint>
@@ -193,7 +187,7 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExamSetti__Setti__7B5B524B">
+        <Association Name="FK__ExamSetti__Setti__0F624AF8">
           <End Role="ExamSettings" Type="Self.ExamSettings" Multiplicity="1" />
           <End Role="ExamSettings_User" Type="Self.ExamSettings_User" Multiplicity="*" />
           <ReferentialConstraint>
@@ -205,7 +199,7 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExamSetti__UserI__7C4F7684">
+        <Association Name="FK__ExamSetti__UserI__10566F31">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="ExamSettings_User" Type="Self.ExamSettings_User" Multiplicity="*" />
           <ReferentialConstraint>
@@ -217,9 +211,9 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__QuestionA__Quest__797309D9">
+        <Association Name="FK__QuestionA__Quest__08B54D69">
           <End Role="QuestionOrder" Type="Self.QuestionOrder" Multiplicity="1" />
-          <End Role="QuestionAnswer" Type="Self.QuestionAnswer" Multiplicity="0..1" />
+          <End Role="QuestionAnswer" Type="Self.QuestionAnswer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="QuestionOrder">
               <PropertyRef Name="QuestionOrderID" />
@@ -347,36 +341,16 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
         <EntityContainer Name="UserScoresLoginModelStoreContainer">
           <EntitySet Name="Batch" EntityType="Self.Batch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExamAssessment" EntityType="Self.ExamAssessment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamQuestions" EntityType="Self.ExamQuestions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExamSettings" EntityType="Self.ExamSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamSettings_Batch" EntityType="Self.ExamSettings_Batch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamSettings_User" EntityType="Self.ExamSettings_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionAnswer" EntityType="Self.QuestionAnswer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuestionOrder" EntityType="Self.QuestionOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatusType" EntityType="Self.StatusType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ExamQuestions" EntityType="Self.ExamQuestions" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ExamQuestions].[SettingID] AS [SettingID], 
-    [ExamQuestions].[QuestionID] AS [QuestionID]
-    FROM [dbo].[ExamQuestions] AS [ExamQuestions]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ExamSettings_Batch" EntityType="Self.ExamSettings_Batch" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ExamSettings_Batch].[SettingID] AS [SettingID], 
-    [ExamSettings_Batch].[BatchID] AS [BatchID]
-    FROM [dbo].[ExamSettings_Batch] AS [ExamSettings_Batch]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ExamSettings_User" EntityType="Self.ExamSettings_User" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ExamSettings_User].[SettingID] AS [SettingID], 
-    [ExamSettings_User].[UserID] AS [UserID]
-    FROM [dbo].[ExamSettings_User] AS [ExamSettings_User]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="QuestionAnswer" EntityType="Self.QuestionAnswer" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [QuestionAnswer].[QuestionOrderID] AS [QuestionOrderID], 
-    [QuestionAnswer].[Answer] AS [Answer]
-    FROM [dbo].[QuestionAnswer] AS [QuestionAnswer]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="Roster" EntityType="Self.Roster" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Roster].[UserID] AS [UserID], 
@@ -392,27 +366,27 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             <End Role="User" EntitySet="User" />
             <End Role="ExamAssessment" EntitySet="ExamAssessment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExamQuest__Setti__619B8048" Association="Self.FK__ExamQuest__Setti__619B8048">
+          <AssociationSet Name="FK__ExamQuest__Setti__1332DBDC" Association="Self.FK__ExamQuest__Setti__1332DBDC">
             <End Role="ExamSettings" EntitySet="ExamSettings" />
             <End Role="ExamQuestions" EntitySet="ExamQuestions" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExamSetti__Batch__5DCAEF64" Association="Self.FK__ExamSetti__Batch__5DCAEF64">
+          <AssociationSet Name="FK__ExamSetti__Batch__0C85DE4D" Association="Self.FK__ExamSetti__Batch__0C85DE4D">
             <End Role="Batch" EntitySet="Batch" />
             <End Role="ExamSettings_Batch" EntitySet="ExamSettings_Batch" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExamSetti__Setti__5CD6CB2B" Association="Self.FK__ExamSetti__Setti__5CD6CB2B">
+          <AssociationSet Name="FK__ExamSetti__Setti__0B91BA14" Association="Self.FK__ExamSetti__Setti__0B91BA14">
             <End Role="ExamSettings" EntitySet="ExamSettings" />
             <End Role="ExamSettings_Batch" EntitySet="ExamSettings_Batch" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExamSetti__Setti__7B5B524B" Association="Self.FK__ExamSetti__Setti__7B5B524B">
+          <AssociationSet Name="FK__ExamSetti__Setti__0F624AF8" Association="Self.FK__ExamSetti__Setti__0F624AF8">
             <End Role="ExamSettings" EntitySet="ExamSettings" />
             <End Role="ExamSettings_User" EntitySet="ExamSettings_User" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExamSetti__UserI__7C4F7684" Association="Self.FK__ExamSetti__UserI__7C4F7684">
+          <AssociationSet Name="FK__ExamSetti__UserI__10566F31" Association="Self.FK__ExamSetti__UserI__10566F31">
             <End Role="User" EntitySet="User" />
             <End Role="ExamSettings_User" EntitySet="ExamSettings_User" />
           </AssociationSet>
-          <AssociationSet Name="FK__QuestionA__Quest__797309D9" Association="Self.FK__QuestionA__Quest__797309D9">
+          <AssociationSet Name="FK__QuestionA__Quest__08B54D69" Association="Self.FK__QuestionA__Quest__08B54D69">
             <End Role="QuestionOrder" EntitySet="QuestionOrder" />
             <End Role="QuestionAnswer" EntitySet="QuestionAnswer" />
           </AssociationSet>
@@ -469,6 +443,15 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
           <NavigationProperty Name="User" Relationship="Self.FK__ExamAsses__UserI__5812160E" FromRole="ExamAssessment" ToRole="User" />
           <NavigationProperty Name="QuestionOrders" Relationship="Self.FK__QuestionO__ExamA__778AC167" FromRole="ExamAssessment" ToRole="QuestionOrder" />
         </EntityType>
+        <EntityType Name="ExamQuestion">
+          <Key>
+            <PropertyRef Name="SettingID" />
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="SettingID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ExamSetting" Relationship="Self.FK__ExamQuest__Setti__1332DBDC" FromRole="ExamQuestions" ToRole="ExamSettings" />
+        </EntityType>
         <EntityType Name="ExamSetting">
           <Key>
             <PropertyRef Name="ExamSettingsID" />
@@ -481,9 +464,18 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
           <Property Name="EndTime" Type="DateTime" Precision="3" />
           <Property Name="AllowedAttempts" Type="Int32" />
           <NavigationProperty Name="ExamAssessments" Relationship="Self.FK__ExamAsses__Setti__59063A47" FromRole="ExamSettings" ToRole="ExamAssessment" />
-          <NavigationProperty Name="ExamQuestion" Relationship="Self.FK__ExamQuest__Setti__619B8048" FromRole="ExamSettings" ToRole="ExamQuestions" />
+          <NavigationProperty Name="ExamQuestions" Relationship="Self.FK__ExamQuest__Setti__1332DBDC" FromRole="ExamSettings" ToRole="ExamQuestions" />
           <NavigationProperty Name="Batches" Relationship="Self.ExamSettings_Batch" FromRole="ExamSettings" ToRole="Batch" />
           <NavigationProperty Name="Users" Relationship="Self.ExamSettings_User" FromRole="ExamSettings" ToRole="User" />
+        </EntityType>
+        <EntityType Name="QuestionAnswer">
+          <Key>
+            <PropertyRef Name="QuestionOrderID" />
+            <PropertyRef Name="Answer" />
+          </Key>
+          <Property Name="QuestionOrderID" Type="Int32" Nullable="false" />
+          <Property Name="Answer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="QuestionOrder" Relationship="Self.FK__QuestionA__Quest__08B54D69" FromRole="QuestionAnswer" ToRole="QuestionOrder" />
         </EntityType>
         <EntityType Name="QuestionOrder">
           <Key>
@@ -494,7 +486,7 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
           <Property Name="QuestionOrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ExamAssessmentFK" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ExamAssessment" Relationship="Self.FK__QuestionO__ExamA__778AC167" FromRole="QuestionOrder" ToRole="ExamAssessment" />
-          <NavigationProperty Name="QuestionAnswer" Relationship="Self.FK__QuestionA__Quest__797309D9" FromRole="QuestionOrder" ToRole="QuestionAnswer" />
+          <NavigationProperty Name="QuestionAnswers" Relationship="Self.FK__QuestionA__Quest__08B54D69" FromRole="QuestionOrder" ToRole="QuestionAnswer" />
         </EntityType>
         <EntityType Name="StatusType">
           <Key>
@@ -536,22 +528,6 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
           <Property Name="UserTypePK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Role" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Users" Relationship="Self.FK__User__UserType__4AB81AF0" FromRole="UserType" ToRole="User" />
-        </EntityType>
-        <EntityType Name="ExamQuestion">
-          <Key>
-            <PropertyRef Name="SettingID" />
-          </Key>
-          <Property Name="SettingID" Type="Int32" Nullable="false" />
-          <Property Name="QuestionID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ExamSetting" Relationship="Self.FK__ExamQuest__Setti__619B8048" FromRole="ExamQuestions" ToRole="ExamSettings" />
-        </EntityType>
-        <EntityType Name="QuestionAnswer">
-          <Key>
-            <PropertyRef Name="QuestionOrderID" />
-          </Key>
-          <Property Name="QuestionOrderID" Type="Int32" Nullable="false" />
-          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="QuestionOrder" Relationship="Self.FK__QuestionA__Quest__797309D9" FromRole="QuestionAnswer" ToRole="QuestionOrder" />
         </EntityType>
         <EntityType Name="Roster">
           <Key>
@@ -614,9 +590,9 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExamQuest__Setti__619B8048">
+        <Association Name="FK__ExamQuest__Setti__1332DBDC">
           <End Role="ExamSettings" Type="Self.ExamSetting" Multiplicity="1" />
-          <End Role="ExamQuestions" Type="Self.ExamQuestion" Multiplicity="0..1" />
+          <End Role="ExamQuestions" Type="Self.ExamQuestion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ExamSettings">
               <PropertyRef Name="ExamSettingsID" />
@@ -626,9 +602,9 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__QuestionA__Quest__797309D9">
+        <Association Name="FK__QuestionA__Quest__08B54D69">
           <End Role="QuestionOrder" Type="Self.QuestionOrder" Multiplicity="1" />
-          <End Role="QuestionAnswer" Type="Self.QuestionAnswer" Multiplicity="0..1" />
+          <End Role="QuestionAnswer" Type="Self.QuestionAnswer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="QuestionOrder">
               <PropertyRef Name="QuestionOrderID" />
@@ -685,14 +661,14 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
         <EntityContainer Name="UserScoresLoginEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Batches" EntityType="Self.Batch" />
           <EntitySet Name="ExamAssessments" EntityType="Self.ExamAssessment" />
+          <EntitySet Name="ExamQuestions" EntityType="Self.ExamQuestion" />
           <EntitySet Name="ExamSettings" EntityType="Self.ExamSetting" />
+          <EntitySet Name="QuestionAnswers" EntityType="Self.QuestionAnswer" />
           <EntitySet Name="QuestionOrders" EntityType="Self.QuestionOrder" />
           <EntitySet Name="StatusTypes" EntityType="Self.StatusType" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserTypes" EntityType="Self.UserType" />
-          <EntitySet Name="ExamQuestions" EntityType="Self.ExamQuestion" />
-          <EntitySet Name="QuestionAnswers" EntityType="Self.QuestionAnswer" />
           <EntitySet Name="Rosters" EntityType="Self.Roster" />
           <AssociationSet Name="FK__Roster__BatchID__52593CB8" Association="Self.FK__Roster__BatchID__52593CB8">
             <End Role="Batch" EntitySet="Batches" />
@@ -710,11 +686,11 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
             <End Role="ExamAssessment" EntitySet="ExamAssessments" />
             <End Role="QuestionOrder" EntitySet="QuestionOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExamQuest__Setti__619B8048" Association="Self.FK__ExamQuest__Setti__619B8048">
+          <AssociationSet Name="FK__ExamQuest__Setti__1332DBDC" Association="Self.FK__ExamQuest__Setti__1332DBDC">
             <End Role="ExamSettings" EntitySet="ExamSettings" />
             <End Role="ExamQuestions" EntitySet="ExamQuestions" />
           </AssociationSet>
-          <AssociationSet Name="FK__QuestionA__Quest__797309D9" Association="Self.FK__QuestionA__Quest__797309D9">
+          <AssociationSet Name="FK__QuestionA__Quest__08B54D69" Association="Self.FK__QuestionA__Quest__08B54D69">
             <End Role="QuestionOrder" EntitySet="QuestionOrders" />
             <End Role="QuestionAnswer" EntitySet="QuestionAnswers" />
           </AssociationSet>
@@ -834,6 +810,14 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ExamQuestions">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.ExamQuestion">
+              <MappingFragment StoreEntitySet="ExamQuestions">
+                <ScalarProperty Name="SettingID" ColumnName="SettingID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ExamSettings">
             <EntityTypeMapping TypeName="UserScoresLoginModel.ExamSetting">
               <MappingFragment StoreEntitySet="ExamSettings">
@@ -844,6 +828,14 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
                 <ScalarProperty Name="Editable" ColumnName="Editable" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="AllowedAttempts" ColumnName="AllowedAttempts" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionAnswers">
+            <EntityTypeMapping TypeName="UserScoresLoginModel.QuestionAnswer">
+              <MappingFragment StoreEntitySet="QuestionAnswer">
+                <ScalarProperty Name="QuestionOrderID" ColumnName="QuestionOrderID" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -893,22 +885,6 @@ warning 6002: The table/view 'UserScoresLogin.dbo.Roster' does not have a primar
               <MappingFragment StoreEntitySet="UserType">
                 <ScalarProperty Name="UserTypePK" ColumnName="UserTypePK" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ExamQuestions">
-            <EntityTypeMapping TypeName="UserScoresLoginModel.ExamQuestion">
-              <MappingFragment StoreEntitySet="ExamQuestions">
-                <ScalarProperty Name="SettingID" ColumnName="SettingID" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="QuestionAnswers">
-            <EntityTypeMapping TypeName="UserScoresLoginModel.QuestionAnswer">
-              <MappingFragment StoreEntitySet="QuestionAnswer">
-                <ScalarProperty Name="QuestionOrderID" ColumnName="QuestionOrderID" />
-                <ScalarProperty Name="Answer" ColumnName="Answer" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

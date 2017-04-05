@@ -14,12 +14,19 @@ namespace LMS1701.USL.UBEAPI.DAL
     
     public partial class QuestionOrder
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public QuestionOrder()
+        {
+            this.QuestionAnswers = new HashSet<QuestionAnswer>();
+        }
+    
         public int QuestionNumber { get; set; }
         public string QuestionID { get; set; }
         public int QuestionOrderID { get; set; }
         public int ExamAssessmentFK { get; set; }
     
         public virtual ExamAssessment ExamAssessment { get; set; }
-        public virtual QuestionAnswer QuestionAnswer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }
     }
 }

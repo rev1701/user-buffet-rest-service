@@ -77,7 +77,7 @@ EC2 Instance: http://ec2-54-215-138-178.us-west-1.compute.amazonaws.com/UserBuff
   ### -examassessment/EditExam?email=&settingsId=&examAssessmentObj (string, int, ExamAssessment)
     Takes in email string to and examsettingsID int  to find a users exam assessment to edit and uses examassessment object passed in to as the data to be stored
     
-  ### -examassessment/SaveExam(ExamAssessment)
+  ### -examassessment/SaveExam (ExamAssessment)
     stores examassessment into the database
     
 ## ExamSettingsController
@@ -85,21 +85,21 @@ EC2 Instance: http://ec2-54-215-138-178.us-west-1.compute.amazonaws.com/UserBuff
   ### -examsettings/
     Gets all exam settings
     
-  ### -examsettings/GetSetting?id=(int)
+  ### -examsettings/GetSetting?id= (int)
     Gets the setting by ID
 
-  ### -examsettings/ModifySettings?id=&examSettingObj(id, examsetting)
+  ### -examsettings/ModifySettings?id=&examSettingObj (id, examsetting)
     Changes an exam setting with the exam setting object passed in
 
-  ### -examsettings/StoreSettings(examSetting)
+  ### -examsettings/StoreSettings (examSetting)
     Takes an exam setting and stores it
    
-  ### -examsettings/AssignExamToUser?email=&examSettingID=(string, int)
+  ### -examsettings/AssignExamToUser?email=&examSettingID= (string, int)
     Assigns a setting to a user
     
-  ### -examsettings/AssignExamToBatch?batchId=&examSettingID=(string, int)
+  ### -examsettings/AssignExamToBatch?batchId=&examSettingID= (string, int)
     Assigns a setting to a batch
     
-  ### -examsettings/AddQuestion(ExamQuestion)
+  ### -examsettings/AddQuestion (ExamQuestion)
     stores an exam question for a setting to the database
 </>

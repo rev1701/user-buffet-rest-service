@@ -116,7 +116,6 @@
     </EntityDeploy>
     <None Include="UBEModel.edmx.diagram">
       <DependentUpon>UBEModel.edmx</DependentUpon>
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

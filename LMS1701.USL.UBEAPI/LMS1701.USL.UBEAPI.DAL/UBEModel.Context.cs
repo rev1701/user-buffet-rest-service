@@ -29,14 +29,14 @@ namespace LMS1701.USL.UBEAPI.DAL
     
         public virtual DbSet<Batch> Batches { get; set; }
         public virtual DbSet<ExamAssessment> ExamAssessments { get; set; }
+        public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
         public virtual DbSet<ExamSetting> ExamSettings { get; set; }
+        public virtual DbSet<QuestionAnswer> QuestionAnswers { get; set; }
         public virtual DbSet<QuestionOrder> QuestionOrders { get; set; }
         public virtual DbSet<StatusType> StatusTypes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
-        public virtual DbSet<ExamQuestion> ExamQuestions { get; set; }
-        public virtual DbSet<QuestionAnswer> QuestionAnswers { get; set; }
         public virtual DbSet<Roster> Rosters { get; set; }
     
         public virtual int AddUserToBatch(Nullable<int> userID, Nullable<int> batchID)

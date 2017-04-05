@@ -32,8 +32,25 @@ namespace LMS1701.USL.UBEAPI.Controllers
             return mdlExams;
         }
 
+        // GET: api/ExamSettings
+        [Route("api/ExamSettings/GetSettings")]
+        [ResponseType(typeof(List<KeyValuePair<int, string>>))]
+        public List<KeyValuePair<int, string>> GetExamIDs()
+        {
+            List<ExamSetting> dbExams = db.ExamSettings.ToList();
+
+            List<KeyValuePair<int, string>> examsInfo = new List<KeyValuePair<int, string>>();
+
+            foreach (ExamSetting exm in dbExams)
+            {
+                examsInfo.Add(new KeyValuePair<int, string>(exm.ExamSettingsID, exm.ExamTemplateID));
+            }
+
+            return examsInfo;
+        }
+
         // GET
-        [Route("api/ExamAssessments/GetExam")]
+        [Route("api/ExamSettings/GetSetting")]
         [ResponseType(typeof(ExamSetting))]
         public async Task<IHttpActionResult> GetExamSetting(int id)
         {
@@ -49,7 +66,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
         }
 
         // PUT
-        [Route("api/ExamAssessments/ModifyExam")]
+        [Route("api/ExamSettings/ModifySettings")]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutExamSetting(int id, Models.ExamSetting mdlExamSetting)
         {
@@ -87,7 +104,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
         }
 
         // POST: api/ExamSettings
-        [Route("api/ExamAssessments/StoreSettings")]
+        [Route("api/ExamSettings/StoreSettings")]
         [ResponseType(typeof(ExamSetting))]
         public async Task<IHttpActionResult> PostExamSetting(Models.ExamSetting mdlExamSettings)
         {
@@ -101,10 +118,13 @@ namespace LMS1701.USL.UBEAPI.Controllers
             db.ExamSettings.Add(examSetting);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = examSetting.ExamSettingsID }, examSetting);
+            Models.ExamSetting mdlExamSetting = AutoMapper.Mapper.Map<Models.ExamSetting>(examSetting);
+            return Ok(mdlExamSetting);
+            //return CreatedAtRoute("DefaultApi", new { id = examSetting.ExamSettingsID }, examSetting);
+
         }
 
-        [Route("api/ExamAssessments/AssignExamToUser")]
+        [Route("api/ExamSettings/AssignExamToUser")]
         [ResponseType(typeof(ExamSetting))]
         public async Task<IHttpActionResult> AssignExam(string email, int examSettingID)
         {
@@ -129,7 +149,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
             return Ok();
         }
 
-        [Route("api/ExamAssessments/AssignExamToBatch")]
+        [Route("api/ExamSettings/AssignExamToBatch")]
         [ResponseType(typeof(ExamSetting))]
         public async Task<IHttpActionResult> AssignBatchExam(string batchId, int examSettingID)
         {
@@ -138,23 +158,49 @@ namespace LMS1701.USL.UBEAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            Batch batch = await db.Batches.SingleAsync(b => b.BatchID == batchId);
-            ExamSetting exmStng = await db.ExamSettings.SingleAsync(e => e.ExamSettingsID == examSettingID);
+            List<Batch> batches = db.Batches.ToList();
+            List<ExamSetting> exmSettings = db.ExamSettings.ToList();
 
-            if (batch.ExamSettings.Contains(exmStng))
+            Batch dbBatch = new Batch();
+            ExamSetting dbSetting = new ExamSetting();
+
+            foreach(Batch b in batches)
+            {
+                if(b.BatchID == batchId)
+                {
+                    dbBatch = b;
+                    break;
+                }
+            }
+
+            foreach (ExamSetting e in exmSettings)
+            {
+                if (e.ExamSettingsID == examSettingID)
+                {
+                    dbSetting = e;
+                    break;
+                }
+            }
+
+
+            //Batch batch = await db.Batches.SingleAsync(b => b.BatchID == batchId);
+            //ExamSetting exmStng = await db.ExamSettings.SingleAsync(e => e.ExamSettingsID == examSettingID);
+
+            if (dbBatch.ExamSettings.Contains(dbSetting))
             {
                 return Ok();
             }
 
-            db.Batches.Attach(batch);
-            batch.ExamSettings.Add(exmStng);
-            db.Entry(batch).State = EntityState.Modified;
+            //db.Batches.Attach(dbBatch);
+            dbBatch.ExamSettings.Add(dbSetting);
+            dbSetting.Batches.Add(dbBatch);
+            //db.Entry(dbBatch).State = EntityState.Modified;
             await db.SaveChangesAsync();
 
             return Ok();
         }
 
-        [Route("api/ExamAssessments/AddQuestion")]
+        [Route("api/ExamSettings/AddQuestion")]
         [ResponseType(typeof(ExamSetting))]
         public async Task<IHttpActionResult> AddQuestion(Models.ExamQuestion mdlQuestion)
         {
@@ -212,7 +258,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+       }
 
         private bool ExamSettingExists(int id)
         {

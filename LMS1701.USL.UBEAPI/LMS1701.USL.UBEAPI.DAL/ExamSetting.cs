@@ -18,6 +18,7 @@ namespace LMS1701.USL.UBEAPI.DAL
         public ExamSetting()
         {
             this.ExamAssessments = new HashSet<ExamAssessment>();
+            this.ExamQuestions = new HashSet<ExamQuestion>();
             this.Batches = new HashSet<Batch>();
             this.Users = new HashSet<User>();
         }
@@ -32,7 +33,8 @@ namespace LMS1701.USL.UBEAPI.DAL
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExamAssessment> ExamAssessments { get; set; }
-        public virtual ExamQuestion ExamQuestion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExamQuestion> ExamQuestions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Batch> Batches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

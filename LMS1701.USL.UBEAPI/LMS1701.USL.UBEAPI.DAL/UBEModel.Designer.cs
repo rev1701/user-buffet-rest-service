@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Alain\documents\visual studio 2015\Projects\LMS1701.USL.UBEAPI\LMS1701.USL.UBEAPI.DAL\UBEModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\pstan\Documents\Visual Studio 2015\Projects\UserBuffet\LMS1701.USL.UBEAPI\LMS1701.USL.UBEAPI.DAL\UBEModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

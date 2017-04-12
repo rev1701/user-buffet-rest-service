@@ -6,6 +6,7 @@ using System.Net.Http.Formatting;
 using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
+using System.Web.Mvc;
 
 namespace LMS1701.USL.UBEAPI
 {
@@ -18,6 +19,7 @@ namespace LMS1701.USL.UBEAPI
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(rhm);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AutoMapperConfig.Configure();
+            AreaRegistration.RegisterAllAreas();
             NLogConfig.nLogger().Log(new NLog.LogEventInfo(NLog.LogLevel.Info, "this", "webservice Started"));
 
         }

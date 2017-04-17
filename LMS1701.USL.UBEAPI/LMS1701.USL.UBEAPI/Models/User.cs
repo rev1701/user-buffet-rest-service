@@ -13,7 +13,6 @@ namespace LMS1701.USL.UBEAPI.Models
         public string password { get; set; }
         public int UserType { get; set; }
         public string email { get; set; }
-
         //public string password { get; set; }
         public virtual ICollection<ExamSetting> ExamSettings { get; set; }
         public virtual UserType UserType1 { get; set; }

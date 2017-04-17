@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using LMS1701.USL.UBEAPI.DAL;
 using System.Web.Http.Cors;
 
+
 namespace LMS1701.USL.UBEAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -64,14 +65,60 @@ namespace LMS1701.USL.UBEAPI.Controllers
 
             return Ok(usr);
         }
+        [Route("api/Users/GetUserGradebook")]
+        [ResponseType(typeof(Models.UserGradebook))]
 
+        public async Task<IHttpActionResult> GetUserGradebook(string email)
+        {      
+            Models.UserGradebook usergrades = new Models.UserGradebook();
+            var user =  db.Users.Where(x => x.email == email).ToList().FirstOrDefault();
+            var batchIDList = await db.Rosters.Where(x => x.UserID == user.UserPK).Select(y => y.BatchID).ToListAsync();
+            List <Batch > batches = new List<Batch>();
+            usergrades.gradebook = new List<Models.ExamAssessment>();
+            usergrades.Batches = new Dictionary<int, string>();
+            
+            foreach (var id in batchIDList)
+            {
+                batches.Add(db.Batches.Where(x => x.BatchPK == id).FirstOrDefault());
+            }
+            var examlist = await db.ExamAssessments.Where(x => x.UserID == user.UserPK).ToListAsync();
+      
+            foreach (var batch in batches)
+            {
+                bool examInBatch = false;
+                foreach (var exam in examlist)
+                {
+                        usergrades.gradebook.Add(AutoMapper.Mapper.Map<Models.ExamAssessment>(exam));
+
+                    if (examInBatch == false)
+                    {
+                        foreach (var setting in batch.ExamSettings.ToList())
+                        {
+                            if (exam.ExamSetting.ExamSettingsID == setting.ExamSettingsID)
+                            {
+                                usergrades.Batches.Add(usergrades.gradebook.Count - 1, batch.Name);
+                                examInBatch = true;
+                            }
+                        }
+                    }
+                }
+                if (examInBatch ==false)
+                {
+                    usergrades.Batches.Add(usergrades.gradebook.Count - 1, "No Batch");
+                }
+            }
+
+            usergrades.user=AutoMapper.Mapper.Map<Models.User>(user);
+            
+            return Ok(usergrades);
+        }
         //GET
         [Route("api/Users/GetUser")]
         [ResponseType(typeof(User))]
         [System.Web.Http.HttpGet]
         public async Task<IHttpActionResult> GetUser(string email)
         {
-            List<User> users = await db.Users.ToListAsync();
+            List<User> users = await db.Users.Where(x=>x.email==email).ToListAsync();
 
             User user = null;
 

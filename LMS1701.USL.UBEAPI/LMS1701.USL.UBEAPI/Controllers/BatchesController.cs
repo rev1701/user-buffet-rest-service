@@ -49,6 +49,16 @@ namespace LMS1701.USL.UBEAPI.Controllers
             return Ok(mdlBatch);
         }
 
+        [Route("api/Batches/GetBatchGradebook")]
+        [ResponseType(typeof(Object))]
+
+        public async Task<IHttpActionResult> GetBackGradebook(int id)
+        {
+            //need batch roster with grades for each exam the batch has taken
+
+            return Ok(new Object());
+        }
+
 
         // GET
         [Route("api/Batches/GetBatch")]

@@ -64,6 +64,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
 
             return Ok(mdlExam);
         }
+        
 
         // PUT
         [Route("api/ExamSettings/ModifySettings")]
@@ -140,7 +141,6 @@ namespace LMS1701.USL.UBEAPI.Controllers
             {
                 return Ok();
             }
-
             db.Users.Attach(usr);
             usr.ExamSettings.Add(exmStng);
             db.Entry(usr).State = EntityState.Modified;

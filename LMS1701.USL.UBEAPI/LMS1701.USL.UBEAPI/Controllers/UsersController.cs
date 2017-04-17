@@ -34,7 +34,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
 
         // GET
         [Route("api/Users/GetUser")]
-        [ResponseType(typeof( User))]
+        [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
             User user = await db.Users.FindAsync(id);
@@ -56,7 +56,7 @@ namespace LMS1701.USL.UBEAPI.Controllers
         {
             User dbUser = await db.Users.FirstOrDefaultAsync(u => u.email == email && u.password == password);
 
-            if(dbUser == null)
+            if (dbUser == null)
             {
                 return BadRequest("User not found");
             }
@@ -65,30 +65,26 @@ namespace LMS1701.USL.UBEAPI.Controllers
 
             return Ok(usr);
         }
-        [Route("api/Users/GetUserGradebook")]
-        [ResponseType(typeof(Models.UserGradebook))]
 
-        public async Task<IHttpActionResult> GetUserGradebook(string email)
-        {      
+        private  Models.UserGradebook GetGradebook(string email)
+        {
             Models.UserGradebook usergrades = new Models.UserGradebook();
-            var user =  db.Users.Where(x => x.email == email).ToList().FirstOrDefault();
-            var batchIDList = await db.Rosters.Where(x => x.UserID == user.UserPK).Select(y => y.BatchID).ToListAsync();
-            List <Batch > batches = new List<Batch>();
-            usergrades.gradebook = new List<Models.ExamAssessment>();
-            usergrades.Batches = new Dictionary<int, string>();
-            
+            var user = db.Users.Where(x => x.email == email).ToList().FirstOrDefault();
+            var batchIDList =  db.Rosters.Where(x => x.UserID == user.UserPK).Select(y => y.BatchID).ToList();
+            List<Batch> batches = new List<Batch>();
+
             foreach (var id in batchIDList)
             {
                 batches.Add(db.Batches.Where(x => x.BatchPK == id).FirstOrDefault());
             }
-            var examlist = await db.ExamAssessments.Where(x => x.UserID == user.UserPK).ToListAsync();
-      
+            var examlist =  db.ExamAssessments.Where(x => x.UserID == user.UserPK).ToList();
+
             foreach (var batch in batches)
             {
                 bool examInBatch = false;
                 foreach (var exam in examlist)
                 {
-                        usergrades.gradebook.Add(AutoMapper.Mapper.Map<Models.ExamAssessment>(exam));
+                    usergrades.gradebook.Add(AutoMapper.Mapper.Map<Models.ExamAssessment>(exam));
 
                     if (examInBatch == false)
                     {
@@ -102,15 +98,38 @@ namespace LMS1701.USL.UBEAPI.Controllers
                         }
                     }
                 }
-                if (examInBatch ==false)
+                if (examInBatch == false)
                 {
                     usergrades.Batches.Add(usergrades.gradebook.Count - 1, "No Batch");
                 }
             }
 
-            usergrades.user=AutoMapper.Mapper.Map<Models.User>(user);
-            
-            return Ok(usergrades);
+            usergrades.user = AutoMapper.Mapper.Map<Models.User>(user);
+
+            return usergrades;
+        }
+
+        [Route("api/Users/GetAllUserGradebooks")]
+        [ResponseType(typeof(List<Models.UserGradebook>))]
+
+        public async Task<IHttpActionResult> GetAllUserGradebook()
+        {
+            List<Models.UserGradebook> AllGradeBooks = new List<Models.UserGradebook>();
+            List<string> EmailList = db.Users.Select(x => x.email).ToList();
+
+            foreach(string email in EmailList)
+            {
+                AllGradeBooks.Add(GetGradebook(email));
+            }
+            return Ok(AllGradeBooks);
+        }
+
+        [Route("api/Users/GetUserGradebook")]
+        [ResponseType(typeof(Models.UserGradebook))]
+
+        public async Task<IHttpActionResult> GetUserGradebook(string email)
+        {          
+            return Ok(GetGradebook(email));
         }
         //GET
         [Route("api/Users/GetUser")]

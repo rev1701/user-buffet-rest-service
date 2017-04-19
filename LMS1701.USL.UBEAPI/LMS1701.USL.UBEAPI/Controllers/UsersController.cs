@@ -81,27 +81,27 @@ namespace LMS1701.USL.UBEAPI.Controllers
 
             foreach (var batch in batches)
             {
-                bool examInBatch = false;
+
                 foreach (var exam in examlist)
                 {
                     usergrades.gradebook.Add(AutoMapper.Mapper.Map<Models.ExamAssessment>(exam));
+                    bool examInBatch = false;
+                        foreach (var setting in batch.ExamSettings.ToList())
+                            {
+                                if (exam.ExamSetting.ExamSettingsID == setting.ExamSettingsID)
+                                {
+                                    usergrades.Batches.Add(usergrades.gradebook.Count - 1, batch.Name);
+                                    examInBatch = true;
+                                }
+                            }
 
                     if (examInBatch == false)
                     {
-                        foreach (var setting in batch.ExamSettings.ToList())
-                        {
-                            if (exam.ExamSetting.ExamSettingsID == setting.ExamSettingsID)
-                            {
-                                usergrades.Batches.Add(usergrades.gradebook.Count - 1, batch.Name);
-                                examInBatch = true;
-                            }
-                        }
+                        usergrades.Batches.Add(usergrades.gradebook.Count - 1, "No Batch");
                     }
+
                 }
-                if (examInBatch == false)
-                {
-                    usergrades.Batches.Add(usergrades.gradebook.Count - 1, "No Batch");
-                }
+   
             }
 
             usergrades.user = AutoMapper.Mapper.Map<Models.User>(user);
